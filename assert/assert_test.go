@@ -75,7 +75,7 @@ func TestNil(t *testing.T) {
 	}
 }
 
-// UT: Compare a value against nil.
+// Benchmark: Compare a value against nil.
 func BenchmarkNil(b *testing.B) {
 	// ARRANGE.
 	testingT := &testableT{TB: b}
@@ -106,7 +106,7 @@ func TestNilWithCustomMessage(t *testing.T) {
 	}
 }
 
-// UT: Compare a value against nil (with a custom message).
+// Benchmark: Compare a value against nil (with a custom message).
 func BenchmarkNilWithCustomMessage(b *testing.B) {
 	// ARRANGE.
 	testingT := &testableT{TB: b}
@@ -152,7 +152,7 @@ func TestNotNil(t *testing.T) {
 	}
 }
 
-// UT: Compare a value against NOT nil.
+// Benchmark: Compare a value against NOT nil.
 func BenchmarkNotNil(b *testing.B) {
 	// ARRANGE.
 	testingT := &testableT{TB: b}
@@ -183,7 +183,7 @@ func TestNotNilWithCustomMessage(t *testing.T) {
 	}
 }
 
-// UT: Compare a value against NOT nil (with a custom message).
+// Benchmark: Compare a value against NOT nil (with a custom message).
 func BenchmarkNotNilWithCustomMessage(b *testing.B) {
 	// ARRANGE.
 	testingT := &testableT{TB: b}
@@ -230,7 +230,7 @@ func TestEqual(t *testing.T) {
 	}
 }
 
-// UT: Compare 2 values for equality.
+// Benchmark: Compare 2 values for equality.
 func BenchmarkEqual(b *testing.B) {
 	// ARRANGE.
 	testingT := &testableT{TB: b}
@@ -261,7 +261,7 @@ func TestEqualWithCustomMessage(t *testing.T) {
 	}
 }
 
-// UT: Compare 2 values for equality (with a custom message).
+// Benchmark: Compare 2 values for equality (with a custom message).
 func BenchmarkEqualWithCustomMessage(b *testing.B) {
 	// ARRANGE.
 	testingT := &testableT{TB: b}
@@ -308,7 +308,7 @@ func TestEqualFn(t *testing.T) {
 	}
 }
 
-// UT: Compare 2 values for equality using a custom comparison function.
+// Benchmark: Compare 2 values for equality using a custom comparison function.
 func BenchmarkEqualFn(b *testing.B) {
 	// ARRANGE.
 	testingT := &testableT{TB: b}
@@ -339,7 +339,7 @@ func TestEqualFnWithCustomMessage(t *testing.T) {
 	}
 }
 
-// UT: Compare 2 values for equality (with a custom message) using a custom comparison function.
+// Benchmark: Compare 2 values for equality (with a custom message) using a custom comparison function.
 func BenchmarkEqualFnWithCustomMessage(b *testing.B) {
 	// ARRANGE.
 	testingT := &testableT{TB: b}
