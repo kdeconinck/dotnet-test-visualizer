@@ -75,21 +75,6 @@ func TestNil(t *testing.T) {
 	}
 }
 
-// Benchmark: Compare a value against nil.
-func BenchmarkNil(b *testing.B) {
-	// ARRANGE.
-	testingT := &testableT{TB: b}
-
-	// RESET.
-	b.ResetTimer()
-
-	// EXECUTION.
-	for i := 0; i < b.N; i++ {
-		// ACT.
-		assert.Nil(testingT, true, "BenchmarkNil")
-	}
-}
-
 // UT: Compare a value against nil (with a custom message).
 func TestNilWithCustomMessage(t *testing.T) {
 	t.Parallel() // Enable parallel execution.
@@ -103,21 +88,6 @@ func TestNilWithCustomMessage(t *testing.T) {
 	// ASSERT.
 	if testingT.failureMsg != "UT Failed: `ValueOf(true)` - got true, want <nil>." {
 		t.Fatalf("Failure message = \"%s\", want \"%s\"", testingT.failureMsg, "UT Failed: `ValueOf(true)` - got true, want <nil>.")
-	}
-}
-
-// Benchmark: Compare a value against nil (with a custom message).
-func BenchmarkNilWithCustomMessage(b *testing.B) {
-	// ARRANGE.
-	testingT := &testableT{TB: b}
-
-	// RESET.
-	b.ResetTimer()
-
-	// EXECUTION.
-	for i := 0; i < b.N; i++ {
-		// ACT.
-		assert.Nil(testingT, true, "", "UT Failed: `ValueOf(true)` - got %t, want <nil>.", true)
 	}
 }
 
@@ -152,21 +122,6 @@ func TestNotNil(t *testing.T) {
 	}
 }
 
-// Benchmark: Compare a value against NOT nil.
-func BenchmarkNotNil(b *testing.B) {
-	// ARRANGE.
-	testingT := &testableT{TB: b}
-
-	// RESET.
-	b.ResetTimer()
-
-	// EXECUTION.
-	for i := 0; i < b.N; i++ {
-		// ACT.
-		assert.NotNil(testingT, nil, "BenchmarkNotNil")
-	}
-}
-
 // UT: Compare a value against NOT nil (with a custom message).
 func TestNotNilWithCustomMessage(t *testing.T) {
 	t.Parallel() // Enable parallel execution.
@@ -180,21 +135,6 @@ func TestNotNilWithCustomMessage(t *testing.T) {
 	// ASSERT.
 	if testingT.failureMsg != "UT Failed: `ValueOf(nil)` - got <nil>, want NOT <nil>." {
 		t.Fatalf("Failure message = \"%s\", want \"%s\"", testingT.failureMsg, "UT Failed: `ValueOf(nil)` - got <nil>, want NOT <nil>.")
-	}
-}
-
-// Benchmark: Compare a value against NOT nil (with a custom message).
-func BenchmarkNotNilWithCustomMessage(b *testing.B) {
-	// ARRANGE.
-	testingT := &testableT{TB: b}
-
-	// RESET.
-	b.ResetTimer()
-
-	// EXECUTION.
-	for i := 0; i < b.N; i++ {
-		// ACT.
-		assert.NotNil(testingT, nil, "", "UT Failed: `ValueOf(nil)` - got <nil>, want NOT <nil>.")
 	}
 }
 
@@ -230,21 +170,6 @@ func TestEqual(t *testing.T) {
 	}
 }
 
-// Benchmark: Compare 2 values for equality.
-func BenchmarkEqual(b *testing.B) {
-	// ARRANGE.
-	testingT := &testableT{TB: b}
-
-	// RESET.
-	b.ResetTimer()
-
-	// EXECUTION.
-	for i := 0; i < b.N; i++ {
-		// ACT.
-		assert.Equal(testingT, false, true, "BenchmarkEqual")
-	}
-}
-
 // UT: Compare 2 values for equality (with a custom message).
 func TestEqualWithCustomMessage(t *testing.T) {
 	t.Parallel() // Enable parallel execution.
@@ -258,21 +183,6 @@ func TestEqualWithCustomMessage(t *testing.T) {
 	// ASSERT.
 	if testingT.failureMsg != "UT Failed: `IsDigit(\"0\")` - got false, want true." {
 		t.Fatalf("Failure message = \"%s\", want \"%s\"", testingT.failureMsg, "UT Failed: `ValueOf(true)` - got true, want <nil>.")
-	}
-}
-
-// Benchmark: Compare 2 values for equality (with a custom message).
-func BenchmarkEqualWithCustomMessage(b *testing.B) {
-	// ARRANGE.
-	testingT := &testableT{TB: b}
-
-	// RESET.
-	b.ResetTimer()
-
-	// EXECUTION.
-	for i := 0; i < b.N; i++ {
-		// ACT.
-		assert.Equal(testingT, false, true, "", "UT Failed: `IsDigit(\"0\")` - got %t, want %t.", false, true)
 	}
 }
 
@@ -308,21 +218,6 @@ func TestEqualFn(t *testing.T) {
 	}
 }
 
-// Benchmark: Compare 2 values for equality using a custom comparison function.
-func BenchmarkEqualFn(b *testing.B) {
-	// ARRANGE.
-	testingT := &testableT{TB: b}
-
-	// RESET.
-	b.ResetTimer()
-
-	// EXECUTION.
-	for i := 0; i < b.N; i++ {
-		// ACT.
-		assert.EqualFn(testingT, false, true, func(got, want bool) bool { return false }, "BenchmarkEqualFn")
-	}
-}
-
 // UT: Compare 2 values for equality (with a custom message) using a custom comparison function.
 func TestEqualFnWithCustomMessage(t *testing.T) {
 	t.Parallel() // Enable parallel execution.
@@ -336,20 +231,5 @@ func TestEqualFnWithCustomMessage(t *testing.T) {
 	// ASSERT.
 	if testingT.failureMsg != "UT Failed: `IsDigit(\"0\")` - got false, want true." {
 		t.Fatalf("Failure message = \"%s\", want \"%s\"", testingT.failureMsg, "UT Failed: `ValueOf(true)` - got true, want <nil>.")
-	}
-}
-
-// Benchmark: Compare 2 values for equality (with a custom message) using a custom comparison function.
-func BenchmarkEqualFnWithCustomMessage(b *testing.B) {
-	// ARRANGE.
-	testingT := &testableT{TB: b}
-
-	// RESET.
-	b.ResetTimer()
-
-	// EXECUTION.
-	for i := 0; i < b.N; i++ {
-		// ACT.
-		assert.EqualFn(testingT, false, true, func(got, want bool) bool { return got == want }, "", "UT Failed: `IsDigit(\"0\")` - got %t, want %t.", false, true)
 	}
 }
