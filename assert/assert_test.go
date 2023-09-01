@@ -275,3 +275,81 @@ func BenchmarkEqualWithCustomMessage(b *testing.B) {
 		assert.Equal(testingT, false, true, "", "UT Failed: `IsDigit(\"0\")` - got %t, want %t.", false, true)
 	}
 }
+
+// UT: Compare 2 values for equality using a custom comparison function.
+func TestEqualFn(t *testing.T) {
+	t.Parallel() // Enable parallel execution.
+
+	for _, tc := range []struct {
+		gInput, wInput bool
+		name           string
+		want           string
+	}{
+		{
+			gInput: false, wInput: true,
+			name: "IsDigit(\"0\")",
+			want: "IsDigit(\"0\") = false, want true",
+		},
+		{
+			gInput: true, wInput: true,
+			name: "IsDigit(\"0\")",
+		},
+	} {
+		// ARRANGE.
+		testingT := &testableT{TB: t}
+
+		// ACT.
+		assert.EqualFn(testingT, tc.gInput, tc.wInput, func(got, want bool) bool { return got == want }, tc.name)
+
+		// ASSERT.
+		if testingT.failureMsg != tc.want {
+			t.Fatalf("Failure message = \"%s\", want \"%s\"", testingT.failureMsg, tc.want)
+		}
+	}
+}
+
+// UT: Compare 2 values for equality using a custom comparison function.
+func BenchmarkEqualFn(b *testing.B) {
+	// ARRANGE.
+	testingT := &testableT{TB: b}
+
+	// RESET.
+	b.ResetTimer()
+
+	// EXECUTION.
+	for i := 0; i < b.N; i++ {
+		// ACT.
+		assert.EqualFn(testingT, false, true, func(got, want bool) bool { return false }, "BenchmarkEqualFn")
+	}
+}
+
+// UT: Compare 2 values for equality (with a custom message) using a custom comparison function.
+func TestEqualFnWithCustomMessage(t *testing.T) {
+	t.Parallel() // Enable parallel execution.
+
+	// ARRANGE.
+	testingT := &testableT{TB: t}
+
+	// ACT.
+	assert.EqualFn(testingT, false, true, func(got, want bool) bool { return false }, "", "UT Failed: `IsDigit(\"0\")` - got %t, want %t.", false, true)
+
+	// ASSERT.
+	if testingT.failureMsg != "UT Failed: `IsDigit(\"0\")` - got false, want true." {
+		t.Fatalf("Failure message = \"%s\", want \"%s\"", testingT.failureMsg, "UT Failed: `ValueOf(true)` - got true, want <nil>.")
+	}
+}
+
+// UT: Compare 2 values for equality (with a custom message) using a custom comparison function.
+func BenchmarkEqualFnWithCustomMessage(b *testing.B) {
+	// ARRANGE.
+	testingT := &testableT{TB: b}
+
+	// RESET.
+	b.ResetTimer()
+
+	// EXECUTION.
+	for i := 0; i < b.N; i++ {
+		// ACT.
+		assert.EqualFn(testingT, false, true, func(got, want bool) bool { return got == want }, "", "UT Failed: `IsDigit(\"0\")` - got %t, want %t.", false, true)
+	}
+}
