@@ -26,7 +26,10 @@
 // Package assert defines functions for making assertions in Go's standard testing framework.
 package assert
 
-import "testing"
+import (
+	"slices"
+	"testing"
+)
 
 // Nil compares got against nil.
 // If they are NOT equal, t is marked as failed, and it's execution is terminated.
@@ -55,6 +58,16 @@ func Equal[V comparable](t testing.TB, got, want V, name string, msg ...any) {
 		t.Helper()
 
 		failT(t, got, want, name, "%s = %v, want %v", msg...)
+	}
+}
+
+// EqualS compares got against want for equality.
+// If they are not equal, t is marked as failed, and it's execution is terminated.
+func EqualS[S ~[]E, E comparable](t testing.TB, got, want S, name string, msg ...any) {
+	if !slices.Equal(got, want) {
+		t.Helper()
+
+		failT(t, got, want, name, "%s = %v != %v", msg...)
 	}
 }
 

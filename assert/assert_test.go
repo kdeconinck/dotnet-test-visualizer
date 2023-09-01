@@ -186,6 +186,56 @@ func TestEqualWithCustomMessage(t *testing.T) {
 	}
 }
 
+// UT: Compare 2 slices for equality.
+func TestEqualS(t *testing.T) {
+	t.Parallel() // Enable parallel execution.
+
+	for _, tc := range []struct {
+		gInput, wInput []int
+		name           string
+		want           string
+	}{
+		{
+			gInput: []int{1, 2, 3},
+			wInput: []int{3, 2, 1},
+			name:   "Equal([1 2 3], [3 2 1])",
+			want:   "Equal([1 2 3], [3 2 1]) = [1 2 3] != [3 2 1]",
+		},
+		{
+			gInput: []int{1, 2, 3},
+			wInput: []int{1, 2, 3},
+			name:   "Equal([1 2 3], [1 2 3])",
+		},
+	} {
+		// ARRANGE.
+		testingT := &testableT{TB: t}
+
+		// ACT.
+		assert.EqualS(testingT, tc.gInput, tc.wInput, tc.name)
+
+		// ASSERT.
+		if testingT.failureMsg != tc.want {
+			t.Fatalf("Failure message = \"%s\", want \"%s\"", testingT.failureMsg, tc.want)
+		}
+	}
+}
+
+// UT: Compare 2 slices for equality (with a custom message).
+func TestEqualSWithCustomMessage(t *testing.T) {
+	t.Parallel() // Enable parallel execution.
+
+	// ARRANGE.
+	testingT := &testableT{TB: t}
+
+	// ACT.
+	assert.EqualS(testingT, []int{1, 2, 3}, []int{3, 2, 1}, "", "UT Failed: `Equal([1 2 3], [3 2 1])` - %v != %v.", []int{1, 2, 3}, []int{3, 2, 1})
+
+	// ASSERT.
+	if testingT.failureMsg != "UT Failed: `Equal([1 2 3], [3 2 1])` - [1 2 3] != [3 2 1]." {
+		t.Fatalf("Failure message = \"%s\", want \"%s\"", testingT.failureMsg, "UT Failed: `Equal([1 2 3], [3 2 1])` - [1 2 3] != [3 2 1].")
+	}
+}
+
 // UT: Compare 2 values for equality using a custom comparison function.
 func TestEqualFn(t *testing.T) {
 	t.Parallel() // Enable parallel execution.
