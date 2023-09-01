@@ -38,6 +38,16 @@ func Nil(t testing.TB, got any, name string, msg ...any) {
 	}
 }
 
+// NotNil compares got against nil.
+// If they are equal, t is marked as failed, and it's execution is terminated.
+func NotNil(t testing.TB, got any, name string, msg ...any) {
+	if got == nil {
+		t.Helper()
+
+		failT(t, got, "NOT <nil>", name, "%s = %v, want %s", msg...)
+	}
+}
+
 // Marks t as failed and terminates its execution.
 func failT[V any](t testing.TB, got, want V, name, msgTemplate string, msg ...any) {
 	if name != "" {

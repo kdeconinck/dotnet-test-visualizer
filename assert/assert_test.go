@@ -120,3 +120,80 @@ func BenchmarkNilWithCustomMessage(b *testing.B) {
 		assert.Nil(testingT, true, "", "UT Failed: `ValueOf(true)` - got %t, want <nil>.", true)
 	}
 }
+
+// UT: Compare a value against NOT nil.
+func TestNotNil(t *testing.T) {
+	t.Parallel() // Enable parallel execution.
+
+	for _, tc := range []struct {
+		input any
+		name  string
+		want  string
+	}{
+		{
+			name: "ValueOf(nil)",
+			want: "ValueOf(nil) = <nil>, want NOT <nil>",
+		},
+		{
+			input: true,
+			name:  "ValueOf(true)",
+		},
+	} {
+		// ARRANGE.
+		testingT := &testableT{TB: t}
+
+		// ACT.
+		assert.NotNil(testingT, tc.input, tc.name)
+
+		// ASSERT.
+		if testingT.failureMsg != tc.want {
+			t.Fatalf("Failure message = \"%s\", want \"%s\"", testingT.failureMsg, tc.want)
+		}
+	}
+}
+
+// UT: Compare a value against NOT nil.
+func BenchmarkNotNil(b *testing.B) {
+	// ARRANGE.
+	testingT := &testableT{TB: b}
+
+	// RESET.
+	b.ResetTimer()
+
+	// EXECUTION.
+	for i := 0; i < b.N; i++ {
+		// ACT.
+		assert.NotNil(testingT, nil, "BenchmarkNotNil")
+	}
+}
+
+// UT: Compare a value against NOT nil (with a custom message).
+func TestNotNilWithCustomMessage(t *testing.T) {
+	t.Parallel() // Enable parallel execution.
+
+	// ARRANGE.
+	testingT := &testableT{TB: t}
+
+	// ACT.
+	assert.NotNil(testingT, nil, "", "UT Failed: `ValueOf(nil)` - got <nil>, want NOT <nil>.")
+
+	// ASSERT.
+	if testingT.failureMsg != "UT Failed: `ValueOf(nil)` - got <nil>, want NOT <nil>." {
+		t.Fatalf("Failure message = \"%s\", want \"%s\"", testingT.failureMsg, "UT Failed: `ValueOf(nil)` - got <nil>, want NOT <nil>.")
+	}
+}
+
+// UT: Compare a value against NOT nil (with a custom message).
+func BenchmarkNotNilWithCustomMessage(b *testing.B) {
+	// ARRANGE.
+	testingT := &testableT{TB: b}
+
+	// RESET.
+	b.ResetTimer()
+
+	// EXECUTION.
+	for i := 0; i < b.N; i++ {
+		// ACT.
+		assert.NotNil(testingT, nil, "", "UT Failed: `ValueOf(nil)` - got <nil>, want NOT <nil>.")
+	}
+}
