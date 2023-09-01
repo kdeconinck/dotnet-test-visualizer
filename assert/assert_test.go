@@ -197,3 +197,81 @@ func BenchmarkNotNilWithCustomMessage(b *testing.B) {
 		assert.NotNil(testingT, nil, "", "UT Failed: `ValueOf(nil)` - got <nil>, want NOT <nil>.")
 	}
 }
+
+// UT: Compare 2 values for equality.
+func TestEqual(t *testing.T) {
+	t.Parallel() // Enable parallel execution.
+
+	for _, tc := range []struct {
+		gInput, wInput bool
+		name           string
+		want           string
+	}{
+		{
+			gInput: false, wInput: true,
+			name: "IsDigit(\"0\")",
+			want: "IsDigit(\"0\") = false, want true",
+		},
+		{
+			gInput: true, wInput: true,
+			name: "IsDigit(\"0\")",
+		},
+	} {
+		// ARRANGE.
+		testingT := &testableT{TB: t}
+
+		// ACT.
+		assert.Equal(testingT, tc.gInput, tc.wInput, tc.name)
+
+		// ASSERT.
+		if testingT.failureMsg != tc.want {
+			t.Fatalf("Failure message = \"%s\", want \"%s\"", testingT.failureMsg, tc.want)
+		}
+	}
+}
+
+// UT: Compare 2 values for equality.
+func BenchmarkEqual(b *testing.B) {
+	// ARRANGE.
+	testingT := &testableT{TB: b}
+
+	// RESET.
+	b.ResetTimer()
+
+	// EXECUTION.
+	for i := 0; i < b.N; i++ {
+		// ACT.
+		assert.Equal(testingT, false, true, "BenchmarkEqual")
+	}
+}
+
+// UT: Compare 2 values for equality (with a custom message).
+func TestEqualWithCustomMessage(t *testing.T) {
+	t.Parallel() // Enable parallel execution.
+
+	// ARRANGE.
+	testingT := &testableT{TB: t}
+
+	// ACT.
+	assert.Equal(testingT, false, true, "", "UT Failed: `IsDigit(\"0\")` - got %t, want %t.", false, true)
+
+	// ASSERT.
+	if testingT.failureMsg != "UT Failed: `IsDigit(\"0\")` - got false, want true." {
+		t.Fatalf("Failure message = \"%s\", want \"%s\"", testingT.failureMsg, "UT Failed: `ValueOf(true)` - got true, want <nil>.")
+	}
+}
+
+// UT: Compare 2 values for equality (with a custom message).
+func BenchmarkEqualWithCustomMessage(b *testing.B) {
+	// ARRANGE.
+	testingT := &testableT{TB: b}
+
+	// RESET.
+	b.ResetTimer()
+
+	// EXECUTION.
+	for i := 0; i < b.N; i++ {
+		// ACT.
+		assert.Equal(testingT, false, true, "", "UT Failed: `IsDigit(\"0\")` - got %t, want %t.", false, true)
+	}
+}
