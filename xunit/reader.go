@@ -33,6 +33,7 @@ import (
 
 	"github.com/kdeconinck/camelcase"
 	"github.com/kdeconinck/maps"
+	"github.com/kdeconinck/words"
 )
 
 // TestRun contains the relevant information stored in xUnit's v2+ XML format.
@@ -147,17 +148,7 @@ func (t *test) friendlyName() string {
 	fnName := t.Name[strings.LastIndex(t.Name, ".")+1:]
 	fnNameWords := camelcase.Split(fnName)
 
-	retVal := make([]string, 0, len(fnNameWords))
-
-	for idx, word := range fnNameWords {
-		if idx == 0 {
-			retVal = append(retVal, word)
-		} else {
-			retVal = append(retVal, strings.ToLower(word))
-		}
-	}
-
-	return strings.Join(retVal, " ")
+	return words.ToSentence(fnNameWords)
 }
 
 // Returns the groups that t belongs to.
@@ -182,17 +173,7 @@ func (t *test) groups() []string {
 	for _, p := range groupNameParts {
 		ccSplit := camelcase.Split(p)
 
-		retVal := make([]string, 0, len(ccSplit))
-
-		for idx, word := range ccSplit {
-			if idx == 0 {
-				retVal = append(retVal, word)
-			} else {
-				retVal = append(retVal, strings.ToLower(word))
-			}
-		}
-
-		groupName = append(groupName, strings.Join(retVal, " "))
+		groupName = append(groupName, words.ToSentence(ccSplit))
 	}
 
 	return groupName
