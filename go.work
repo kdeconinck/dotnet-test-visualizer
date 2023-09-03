@@ -6,5 +6,6 @@ use (
 	./camelcase
 	./maps
 	./slices
+	./words
 	./xunit
 )
