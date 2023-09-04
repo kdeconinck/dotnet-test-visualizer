@@ -42,3 +42,15 @@ func Equal[S ~[]E, E comparable](s1, s2 S) bool {
 
 	return true
 }
+
+// ContainsFn reports whether el exists in s using a custom comparison function.
+// For each element in s, cmpFn is invoked and when it returns true, ContainsFn returns true.
+func ContainsFn[S ~[]E, E any](s S, want E, cmpFn func(E, E) bool) bool {
+	for _, el := range s {
+		if cmpFn(el, want) {
+			return true
+		}
+	}
+
+	return false
+}

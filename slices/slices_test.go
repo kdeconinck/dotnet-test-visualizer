@@ -27,6 +27,7 @@
 package slices_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/kdeconinck/assert"
@@ -75,5 +76,41 @@ func TestEqual(t *testing.T) {
 			"Input (s2): %v\n"+
 			"\033[32mExpected:   %v\033[0m\n"+
 			"\033[31mActual:     %v\033[0m\n\n", tc.s1Input, tc.s2Input, tc.want, got)
+	}
+}
+
+// UT: Search for an element in a slice using a custom comparison function.
+func TestContainsFn(t *testing.T) {
+	for _, tc := range []struct {
+		sInput    []string
+		wantInput string
+		want      bool
+	}{
+		{
+			sInput:    []string{"Hello", "World"},
+			wantInput: "W",
+			want:      true,
+		},
+		{
+			sInput:    []string{"Hello", "World"},
+			wantInput: "w",
+			want:      false,
+		},
+		{
+			sInput:    []string{"Hello", "World"},
+			wantInput: "Hello",
+			want:      true,
+		},
+	} {
+		// ACT.
+		got := slices.ContainsFn(tc.sInput, tc.wantInput, func(got, want string) bool { return strings.HasPrefix(got, want) })
+
+		// ASSERT.
+		assert.Equal(t, got, tc.want, "", "\n\n"+
+			"UT Name:      Search for an element in a slice using a custom comparison function.\n"+
+			"Input (s):    %v\n"+
+			"Input (want): %v\n"+
+			"\033[32mExpected:     %v\033[0m\n"+
+			"\033[31mActual:       %v\033[0m\n\n", tc.sInput, tc.wantInput, tc.want, got)
 	}
 }
