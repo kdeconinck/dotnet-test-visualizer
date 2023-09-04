@@ -65,6 +65,11 @@ func (r *rdr) peekRune() rune {
 	return rune(r.input[r.pos])
 }
 
+// Verify if the word that's currently read by r is a word that should NOT be split.
+func (r *rdr) isNoSplitWord(sIdx int) bool {
+	return slices.ContainsFn(NoSplit, r.input[sIdx:r.pos+1], func(got, want string) bool { return strings.HasPrefix(got, want) })
+}
+
 // Read the current word from r.
 // The word is considered terminated as soon as the reader encounters a new uppercase character.
 func (r *rdr) readWord() string {
@@ -73,7 +78,7 @@ func (r *rdr) readWord() string {
 	r.readRune()
 
 	if r.pos < len(r.input) && unicode.IsUpper(r.peekRune()) {
-		for r.pos < len(r.input) && (unicode.IsUpper(r.peekRune()) || slices.ContainsFn(NoSplit, r.input[sIdx:r.pos+1], func(got, want string) bool { return strings.HasPrefix(got, want) })) {
+		for r.pos < len(r.input) && (unicode.IsUpper(r.peekRune()) || r.isNoSplitWord(sIdx)) {
 			r.readRune()
 		}
 
@@ -84,7 +89,7 @@ func (r *rdr) readWord() string {
 		return r.input[sIdx:r.pos]
 	}
 
-	for r.pos < len(r.input) && (!unicode.IsUpper(r.peekRune()) || slices.ContainsFn(NoSplit, r.input[sIdx:r.pos+1], func(got, want string) bool { return strings.HasPrefix(got, want) })) {
+	for r.pos < len(r.input) && (!unicode.IsUpper(r.peekRune()) || r.isNoSplitWord(sIdx)) {
 		r.readRune()
 	}
 
