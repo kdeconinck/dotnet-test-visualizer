@@ -27,9 +27,15 @@
 package camelcase
 
 import (
+	"strings"
 	"unicode"
 	"unicode/utf8"
+
+	"github.com/kdeconinck/slices"
 )
+
+// NoSplit is a slice of words that should NOT be split by the Split function.
+var NoSplit []string
 
 // A reader designed for reading "CamelCase" strings.
 type rdr struct {
@@ -67,7 +73,7 @@ func (r *rdr) readWord() string {
 	r.readRune()
 
 	if r.pos < len(r.input) && unicode.IsUpper(r.peekRune()) {
-		for r.pos < len(r.input) && unicode.IsUpper(r.peekRune()) {
+		for r.pos < len(r.input) && (unicode.IsUpper(r.peekRune()) || slices.ContainsFn(NoSplit, r.input[sIdx:r.pos+1], func(got, want string) bool { return strings.HasPrefix(got, want) })) {
 			r.readRune()
 		}
 
@@ -78,7 +84,7 @@ func (r *rdr) readWord() string {
 		return r.input[sIdx:r.pos]
 	}
 
-	for r.pos < len(r.input) && !unicode.IsUpper(r.peekRune()) {
+	for r.pos < len(r.input) && (!unicode.IsUpper(r.peekRune()) || slices.ContainsFn(NoSplit, r.input[sIdx:r.pos+1], func(got, want string) bool { return strings.HasPrefix(got, want) })) {
 		r.readRune()
 	}
 

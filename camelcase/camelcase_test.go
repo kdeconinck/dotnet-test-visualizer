@@ -36,6 +36,11 @@ import (
 
 // UT: Split a "CamelCase" string.
 func TestSplit(t *testing.T) {
+	// CLEANUP.
+	defer func() {
+		camelcase.NoSplit = make([]string, 0)
+	}()
+
 	for _, tc := range []struct {
 		input string
 		want  []string
@@ -56,7 +61,18 @@ func TestSplit(t *testing.T) {
 			input: "PDFLoader",
 			want:  []string{"PDF", "Loader"},
 		},
+		{
+			input: "SQLDatabase",
+			want:  []string{"SQLDatabase"},
+		},
+		{
+			input: "SqlQuery",
+			want:  []string{"SqlQuery"},
+		},
 	} {
+		// ARRANGE.
+		camelcase.NoSplit = []string{"SQLDatabase", "SqlQuery"}
+
 		// ACT.
 		got := camelcase.Split(tc.input)
 
