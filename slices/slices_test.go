@@ -79,6 +79,47 @@ func TestEqual(t *testing.T) {
 	}
 }
 
+// UT: Search for an element in a slice.
+func TestContains(t *testing.T) {
+	for _, tc := range []struct {
+		sInput    []int
+		wantInput int
+		want      bool
+	}{
+		{
+			sInput:    []int{1, 2, 3},
+			wantInput: 1,
+			want:      true,
+		},
+		{
+			sInput:    []int{1, 2, 3},
+			wantInput: 2,
+			want:      true,
+		},
+		{
+			sInput:    []int{1, 2, 3},
+			wantInput: 3,
+			want:      true,
+		},
+		{
+			sInput:    []int{1, 2, 3},
+			wantInput: 4,
+			want:      false,
+		},
+	} {
+		// ACT.
+		got := slices.Contains(tc.sInput, tc.wantInput)
+
+		// ASSERT.
+		assert.Equal(t, got, tc.want, "", "\n\n"+
+			"UT Name:      Search for an element in a slice.\n"+
+			"Input (s):    %v\n"+
+			"Input (want): %v\n"+
+			"\033[32mExpected:     %v\033[0m\n"+
+			"\033[31mActual:       %v\033[0m\n\n", tc.sInput, tc.wantInput, tc.want, got)
+	}
+}
+
 // UT: Search for an element in a slice using a custom comparison function.
 func TestContainsFn(t *testing.T) {
 	for _, tc := range []struct {
