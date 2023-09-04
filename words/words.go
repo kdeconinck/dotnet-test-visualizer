@@ -26,7 +26,14 @@
 // Package words defines functions for working with slices of words.
 package words
 
-import "strings"
+import (
+	"strings"
+
+	"github.com/kdeconinck/slices"
+)
+
+// NoTransform is a slice of words that should NOT be transformed by the ToSentence function.
+var NoTransform []string
 
 // ToSentence returns a slice of words into a sentence.
 // Each word in v, except for the first one is converted to lowercase.
@@ -35,6 +42,8 @@ func ToSentence(v []string) string {
 
 	for idx, word := range v {
 		if idx == 0 {
+			retVal = append(retVal, word)
+		} else if slices.Contains(NoTransform, word) {
 			retVal = append(retVal, word)
 		} else {
 			retVal = append(retVal, strings.ToLower(word))

@@ -36,6 +36,11 @@ import (
 
 // UT: Convert a slice of words into a sentence.
 func TestToSentence(t *testing.T) {
+	// CLEANUP.
+	defer func() {
+		words.NoTransform = make([]string, 0)
+	}()
+
 	for _, tc := range []struct {
 		words []string
 		want  string
@@ -52,7 +57,14 @@ func TestToSentence(t *testing.T) {
 			words: []string{"A", "Collection", "Of", "Words", "Starting", "With", "An", "Uppercase", "Character"},
 			want:  "A collection of words starting with an uppercase character",
 		},
+		{
+			words: []string{"An", "HTTP", "&", "SqlQuery"},
+			want:  "An HTTP & SqlQuery",
+		},
 	} {
+		// ARRANGE.
+		words.NoTransform = []string{"HTTP", "SqlQuery"}
+
 		// ACT.
 		got := words.ToSentence(tc.words)
 
